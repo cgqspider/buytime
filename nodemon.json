@@ -1,0 +1,5 @@
+  
+{
+  "watch": ["api.yaml", "documentation/"],
+    "ext": ".js,.mjs,.coffee,.litcoffee,.json,.yaml"
+  }

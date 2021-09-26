@@ -1,0 +1,27 @@
+[+] Register a user - Completed 
+[+] Login a user - Completed
+[+] Who am I - Completed
+[+] Refresh the token
+[+] Logout the user
+[+] Add new product - Completed
+[+] Update a product - Almost Completed
+[+] Get all products - Completed
+[+] Get single product - Completed
+[+] Delete a product - Completed
+
+//error handler while debug true and false not working 
+
+Conventions: 
+//TODO Valid the request first 
+//TODO Try & Catch Block
+//TODO Inside Try block proper error and success message : Flow
+//TODO Bug of register user after expiration of link
+//TODO Rate Limiter for multiple registeration
+//TODO Check calendly for more precise response 
+
+
+"email":"admin@gmail.com",
+"password":"admin123"
+
+"email":"testi@gmail.com",
+"password":"12345"

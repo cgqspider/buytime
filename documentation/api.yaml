@@ -1,0 +1,47 @@
+swagger: "2.0"
+info:
+  title: Ecommerce Project
+  description: This is my Wakeupcoders Ecommerce Project API Documentation
+  version: 1.0
+  contact:
+    email: wakeupcoders@gmail.com
+  liscence:
+    name: Apache 2.0
+    url: "http://www.apache.org/liscences/LIS"
+  servers:
+    -url: http://localhost:5000
+    description: THis is my local Server
+    -url: http://example.com/
+    description: This is my original URL
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+schemes:
+- "https"
+- "http"
+#Return Users From get request
+paths:
+  /api/products:
+    get:
+      tags:
+      - "User Module"
+      summary: "Add a new pet to the store"
+      description: ""
+      operationId: "addPet"
+      summary: Returns a string.
+      description: String Chechup
+      security:
+        - Bearer: []
+      responses:
+        200:    # status code
+          description: Successul Response
+          schema: 
+            type: string
+            example: "Users String"
+        400:
+          description: User Error
+          schema: 
+            type: string
+            example: "Some Error "
