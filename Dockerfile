@@ -1,7 +1,7 @@
 FROM node:14
 
 # Create app directory
-WORKDIR /usr/src/app
+WORKDIR /usr/project/app/src
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
@@ -14,6 +14,8 @@ RUN npm install
 
 # Bundle app source
 COPY ./src .
+
+COPY . /usr/project/app
 
 EXPOSE  5000
 CMD [ "npm", "run","dev" ]
