@@ -2,8 +2,18 @@ import mysql from 'mysql';
 
 export default {
   //Function to get all the product
-  get: function (con, callback) {
-    con.query("SELECT * FROM tbproducts", callback);
+  get: function (con,numPerPage=3, pageNo=1, callback) {
+    // limit as 20
+  const limit = numPerPage;
+  // page number
+  const page = pageNo;
+  // calculate offset
+  const offset = (page - 1) * limit
+
+  const prodsQuery = "select * from tbproducts limit "+limit+" OFFSET "+offset
+    // con.query("SELECT * FROM tbproducts", callback);
+    con.query(prodsQuery, callback);
+
   },
 
   getCart: function (con,pids ,callback) {
@@ -43,5 +53,9 @@ export default {
   //Function to delete a product
   destroy: function (con, id, callback) {
     con.query(`DELETE FROM tbproducts WHERE pid = ${id}`, callback)
-  }
+  },
+
+ 
+
+
 }
