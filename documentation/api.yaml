@@ -13,14 +13,16 @@ info:
     description: THis is my local Server
     -url: http://example.com/
     description: This is my original URL
+
+
 securityDefinitions:
   Bearer:
     type: apiKey
     name: Authorization
     in: header
 schemes:
-- "https"
 - "http"
+- "https"
 
 
 definitions:
@@ -34,6 +36,45 @@ definitions:
     required:  
       - id
       - name
+  UserRegister:
+    properties:
+      name:
+        type: string
+      email:
+        type: string
+      password:
+        type: string
+    # Both properties are required
+    required:  
+      - name
+      - email
+      - password
+  UserLogin:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    # Both properties are required
+    required:  
+      - email
+      - password
+  Product:
+    properties:
+      name:
+        type: string
+      price:
+        type: string
+      size:
+        type: string
+      image:
+        type: file
+    # Both properties are required
+    required:  
+      - name
+      - price
+      - size
+      - image
 
 #Return Users From get request
 paths:
@@ -42,25 +83,58 @@ paths:
     post:
       tags:
       - "Products Module"
-      summary: Creates a new user.
+      summary: Creates a new Product
+      security:
+        - Bearer: []
+      consumes:
+         - multipart/form-data
       parameters:
-        - in: body
-          name: user
-          schema:
-            $ref: '#/definitions/User'
+        - name: name
+          in: formData
+          description: name of product
+          required: true
+          type: string
+          
+        - name: price
+          in: formData
+          description: price of product
+          required: true
+          type: string
+
+        - name: size
+          in: formData
+          description: Size of Product
+          required: true
+          type: string
+
+        - name: image
+          in: formData
+          description: file to upload
+          required: true
+          type: file
       responses:
         200:
           description: OK
+          
     get:
       tags:
       - "Products Module"
-      summary: "Add a new pet to the store"
+      summary: "Returns the products"
       description: ""
-      operationId: "addPet"
       summary: Returns a string.
       description: String Chechup
-      security:
-        - Bearer: []
+      parameters:
+        - in: query
+          name: numPerPage
+          schema:
+            type: integer
+          description: The number of records required per page
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: The page number
+
       responses:
         200:    # status code
           description: Successul Response
@@ -72,28 +146,27 @@ paths:
           schema: 
             type: string
             example: "Some Error "      
-  /api/products/{petId}:
+  /api/products/{productId}:
     get:
       tags:
       - "Products Module"
-      summary: "Find pet by ID"
-      description: "Returns a single pet"
-      operationId: "getPetById"
+      summary: "Find product by ID"
+      description: "Returns a single Product"
+      operationId: "getProductById"
       produces:
-      - "application/xml"
       - "application/json"
       parameters:
-      - name: "petId"
+      - name: "productId"
         in: "path"
-        description: "ID of pet to return"
+        description: "ID of product to return"
         required: true
         type: "integer"
-        format: "int64"
+        
       responses:
         "200":
           description: "successful operation"
           schema:
-            $ref: "#/definitions/Pet"
+            # $ref: "#/definitions/Pet"
         "400":
           description: "Invalid ID supplied"
         "404":
@@ -101,11 +174,17 @@ paths:
     delete:
       tags:
       - "Products Module"
-      summary: "Add a new pet to the store"
+      summary: "Delete a Product"
       description: ""
       operationId: "addPet"
       summary: Returns a string.
       description: String Chechup
+      parameters:
+      - name: "productId"
+        in: "path"
+        description: "ID of product to return"
+        required: true
+        type: "integer"
       security:
         - Bearer: []
       responses:
@@ -122,22 +201,45 @@ paths:
     put:
       tags:
       - "Products Module"
-      summary: "Update an existing pet"
+      summary: "Update an existing Product"
       description: ""
-      operationId: "updatePet"
+      operationId: "updateProduct"
       consumes:
-      - "application/json"
-      - "application/xml"
-      produces:
-      - "application/xml"
-      - "application/json"
+         - multipart/form-data
       parameters:
-      - in: "body"
-        name: "body"
-        description: "Pet object that needs to be added to the store"
-        required: true
-        schema:
-          $ref: "#/definitions/Pet"
+        - name: name
+          in: formData
+          description: name of product
+          required: true
+          type: string
+          
+        - name: price
+          in: formData
+          description: price of product
+          required: true
+          type: string
+
+        - name: size
+          in: formData
+          description: Size of Product
+          required: true
+          type: string
+
+        - name: image
+          in: formData
+          description: file to upload
+          required: true
+          type: file
+        - name: "productId"
+          in: "path"
+          description: "ID of product to return"
+          required: true
+          type: "integer"
+   
+      produces:
+     
+      - "application/json"
+     
       responses:
         "400":
           description: "Invalid ID supplied"
@@ -156,29 +258,35 @@ paths:
         - in: body
           name: user
           schema:
-            $ref: '#/definitions/User'
+            $ref: '#/definitions/UserRegister'
       responses:
         200:
           description: OK
-    get:
+        409:
+          description: This email is already taken.
+        422:
+          description: Mandatory Fields are required
+        500:
+          description: Internal Server Error
+   
+  
+
+  /api/login:
+    post:
       tags:
       - "User Module"
-      summary: "Add a new pet to the store"
-      description: ""
-      operationId: "addPet"
-      summary: Returns a string.
-      description: String Chechup
-      security:
-        - Bearer: []
+      summary: User Login after registeration.
+      parameters:
+        - in: body
+          name: user
+          schema:
+            $ref: '#/definitions/UserLogin'
       responses:
-        200:    # status code
-          description: Successul Response
-          schema: 
-            type: string
-            example: "Users String"
-        400:
-          description: User Error
-          schema: 
-            type: string
-            example: "Some Error "
-  
+        200:
+          description: OK
+        401:
+          description: Username or password is wrong!
+        422:
+          description: Mandatory Fields are required
+        500:
+          description: Internal Server Error
