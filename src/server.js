@@ -60,6 +60,8 @@ app.use(function (req, res, next) {
 
 app.use('/api', routes);
 app.use('/uploads', express.static('uploads'));
+
+
 app.use('/', swaggerUI.serve, swaggerUI.setup(swaggerJSDocs));
 
 // app.use('/', (req, res) => {
